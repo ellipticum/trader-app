@@ -1,0 +1,36 @@
+.header {
+  padding: 20px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.item {
+  text-transform: lowercase;
+  padding: 12px 20px;
+  font-size: 16px;
+  transition: 200ms all ease-in-out;
+
+  background: rgba(240, 240, 240);
+
+  &:first-child {
+    border-bottom-left-radius: 50px;
+    border-top-left-radius: 50px;
+  }
+
+  &:last-child {
+    border-bottom-right-radius: 50px;
+    border-top-right-radius: 50px;
+  }
+
+  &:hover {
+    background: rgba(220, 220, 220);
+  }
+
+  &.active {
+    background: rgba(20, 20, 20);
+
+    color: rgb(255, 255, 255);
+  }
+}

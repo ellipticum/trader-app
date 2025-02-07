@@ -1,0 +1,129 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 5;
+  transition: 200ms all ease-in-out;
+
+  &.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.popup {
+  top: 50%;
+  left: 50%;
+  border-radius: 8px;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+  position: fixed;
+  //width: clamp(320px, 90vw, 480px);
+  height: fit-content;
+  z-index: 20;
+  background: rgb(255, 255, 255);
+
+  overflow: hidden auto;
+
+  transition: 200ms opacity ease-in-out;
+
+  max-height: 90vh;
+
+  &.hidden {
+    pointer-events: none;
+
+    opacity: 0;
+
+    z-index: -10;
+  }
+
+  @media (min-width: 576px) {
+    top: 50%;
+  }
+
+  @media (max-height: 760px) and (max-width: 767px) {
+    transform: translate(-50%, 0);
+
+    max-height: calc(100vh - 20px - 90px);
+
+    top: 20px;
+  }
+
+  &.special {
+    @media (max-width: 575px) {
+      border-radius: 0;
+
+      width: 100%;
+
+      bottom: 60px;
+
+      transition: 400ms transform ease-in-out;
+
+      top: unset;
+      max-height: unset;
+
+      transform: translate(-50%, 0);
+    }
+
+    &.hidden {
+      @media (max-width: 575px) {
+        transform: translate(-50%, 100%);
+      }
+    }
+  }
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.popup h2 {
+  font-size: 20px;
+  font-weight: 400;
+  color: rgb(0, 0, 0);
+  margin-bottom: 20px;
+}
+
+.popup input[type='text'],
+.popup input[type='datetime-local'],
+.popup textarea,
+.popup select {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid rgb(200, 200, 200);
+  border-radius: 8px;
+  font-size: 14px;
+  color: rgb(0, 0, 0);
+  box-sizing: border-box;
+}
+
+.popup textarea {
+  min-height: 120px;
+  resize: none;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.popup button[data-type='special'] {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  background: rgba(0, 0, 0, 1);
+  color: rgb(255, 255, 255);
+  font-weight: 300;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 200ms ease-in-out;
+  max-width: 360px;
+}
+
+.popup button[data-type='special']:hover {
+  background: rgba(0, 0, 0, 0.75);
+}

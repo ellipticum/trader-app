@@ -1,0 +1,91 @@
+.commentSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.commentGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.commentItem {
+  padding: 8px;
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 8px;
+  position: relative;
+}
+
+.replyButton {
+  margin-top: 8px;
+  background: none;
+  border: none;
+  color: rgb(0, 123, 255);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.replyInput {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.submitReplyButton {
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+  border: none;
+  padding: 8px 12px;
+  white-space: nowrap;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.replyGrid {
+  padding-left: 16px;
+  border-left: 2px solid rgb(238, 238, 238);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.bottom {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.replyItem {
+  padding: 4px 12px;
+  background: rgb(249, 249, 249);
+  border-radius: 9px;
+  font-size: 14px;
+}
+
+.commentInput {
+  display: flex;
+  gap: 8px;
+}
+
+.button {
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: 200ms all ease-in-out;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.75);
+  }
+}
+
+.heading {
+  margin-bottom: 10px;
+}

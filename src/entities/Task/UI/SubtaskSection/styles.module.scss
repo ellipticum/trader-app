@@ -1,0 +1,60 @@
+.subtaskSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.subtaskList {
+  display: flex;
+  flex-direction: column;
+  //gap: 4px;
+}
+
+.subtaskItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+
+  &:hover {
+    & .deleteButton {
+      opacity: 100%;
+      pointer-events: all;
+    }
+  }
+}
+
+.heading {
+  margin-bottom: 8px;
+}
+
+.subtaskInput {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.completed {
+  text-decoration: line-through;
+}
+
+.part {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  & span {
+    margin-top: 2px;
+  }
+}
+
+.deleteButton {
+  padding: 8px;
+  font-size: 24px;
+  opacity: 0;
+  transition: 200ms all ease-in-out;
+  pointer-events: none;
+  width: fit-content;
+  height: 32px;
+}

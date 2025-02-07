@@ -1,0 +1,119 @@
+.project {
+  display: flex;
+  flex: 1;
+}
+
+.top {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+
+  gap: 20px;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.input {
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  transition: 200ms all ease-in-out;
+  width: 300px;
+
+  &:focus {
+    border-color: rgba(0, 0, 0, .5);
+  }
+}
+
+.plug {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.name {
+  font-size: 32px;
+  font-weight: 500;
+}
+
+.columns {
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  flex: 1;
+
+  &.hidden {
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  @media (min-width: 768px) {
+    padding: 0 20px;
+
+    &:first-child {
+      padding-left: 0;
+    }
+
+    &:not(:last-child) {
+      border-right: 1px solid rgba(240, 240, 240);
+    }
+  }
+}
+
+.tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.block {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+}
+
+.button {
+  //border-radius: 50px;
+  padding: 6px 16px;
+  //color: rgba(255, 255, 255);
+  //background: rgba(0, 0, 0);
+  transition: 200ms all ease-in-out;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+
+  &:hover {
+    border-bottom: 1px solid rgba(0, 0, 0, 1);
+    //background: rgba(0, 0, 0, .75);
+  }
+}
+
+.statusButtons {
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
