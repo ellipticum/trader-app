@@ -1,11 +1,15 @@
 .container {
   padding: 20px;
   border-radius: 8px;
-  width: 400px;
+  width: 360px;
   display: flex;
   flex-direction: column;
   flex: 1;
   gap: 12px;
+
+  @media (min-width: 576px) {
+    width: 400px;
+  }
 }
 
 .item {
