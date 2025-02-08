@@ -1,4 +1,3 @@
-// SubtaskSection.tsx
 import { ChangeEvent, FC } from 'react'
 import styles from './styles.module.scss'
 import { ISubtask } from '../../model/interfaces/subtask'

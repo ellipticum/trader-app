@@ -48,7 +48,6 @@ const CreateTaskPopup = () => {
 
         setIsTaskPopupHidden(true)
 
-        // Сброс значений
         setName('')
         setDescription('')
         setStartsAt('')

@@ -31,6 +31,7 @@ const Header = () => {
 
     const setMockData = () => {
         setProjects(mockProjects)
+        setProject(null)
     }
 
     return (

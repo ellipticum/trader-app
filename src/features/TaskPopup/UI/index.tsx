@@ -1,5 +1,4 @@
-// TaskPopup.tsx
-import React, { ChangeEvent, FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import Popup from '../../../shared/UI/Popup'
 import styles from './styles.module.scss'
 import { TaskPriority } from '../../../entities/Task/model/enums/taskPriority'
@@ -7,13 +6,17 @@ import { TaskStatus } from '../../../entities/Task/model/enums/taskStatus'
 import { useProjects } from '../../../app/providers/ProjectsProvider'
 import { usePopups } from '../../../app/providers/PopupsProvider'
 import { validateTask } from '../../../entities/Task/model/helpers/validateTask'
-import { validateImages } from '../../../entities/Task/model/helpers/validateImages'
 import { IComment } from '../../../entities/Task/model/interfaces/comment'
 import { ISubtask } from '../../../entities/Task/model/interfaces/subtask'
 import SubtaskSection from '../../../entities/Task/UI/SubtaskSection'
 import FileSection from '../../../entities/Task/UI/FileSection'
 import CommentSection from '../../../entities/Task/UI/CommentSection'
 import TaskForm from '../../../entities/Task/UI/TaskForm'
+
+const safeISOString = (dateValue: any): string => {
+    const date = new Date(dateValue)
+    return isNaN(date.getTime()) ? '' : date.toISOString()
+}
 
 const TaskPopup: FC = () => {
     const { project, setProject, taskToEdit, setTaskToEdit } = useProjects()
@@ -94,11 +97,20 @@ const TaskPopup: FC = () => {
 
     const handleUpdateTask = () => {
         if (!project || !draftTask) return
+
+        const startsAtISO = safeISOString(draftTask.startsAt)
+        const endsAtISO = safeISOString(draftTask.endsAt)
+
+        if (!startsAtISO || !endsAtISO) {
+            alert('Invalid date value')
+            return
+        }
+
         const error = validateTask({
             name: draftTask.name,
             description: draftTask.description,
-            startsAt: new Date(draftTask.startsAt).toISOString(),
-            endsAt: new Date(draftTask.endsAt).toISOString()
+            startsAt: startsAtISO,
+            endsAt: endsAtISO
         })
         if (error) {
             alert(error)
@@ -136,8 +148,8 @@ const TaskPopup: FC = () => {
                             setDraftTask(draftTask ? { ...draftTask, description: value } : null)
                         }
                         startsAt={
-                            draftTask?.startsAt
-                                ? new Date(draftTask.startsAt).toISOString().slice(0, 16)
+                            draftTask?.startsAt && safeISOString(draftTask.startsAt)
+                                ? safeISOString(draftTask.startsAt).slice(0, 16)
                                 : ''
                         }
                         setStartsAt={(value: string) =>
@@ -146,8 +158,8 @@ const TaskPopup: FC = () => {
                             )
                         }
                         endsAt={
-                            draftTask?.endsAt
-                                ? new Date(draftTask.endsAt).toISOString().slice(0, 16)
+                            draftTask?.endsAt && safeISOString(draftTask.endsAt)
+                                ? safeISOString(draftTask.endsAt).slice(0, 16)
                                 : ''
                         }
                         setEndsAt={(value: string) =>
