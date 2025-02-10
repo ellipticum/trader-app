@@ -1,5 +1,5 @@
 import React, { FC, useMemo, useState } from 'react'
-import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd'
+import { DragDropContext, Droppable, Draggable, DropResult, DragUpdate } from '@hello-pangea/dnd'
 import { useProjects } from '../../../../app/providers/ProjectsProvider'
 import styles from './styles.module.scss'
 import Container from '../../../../shared/UI/Container'
@@ -23,6 +23,8 @@ const Project: FC = () => {
     const { isTaskPopupHidden, setIsTaskPopupHidden, setIsEditProjectPopupHidden } = usePopups()
 
     const [activeStatus, setActiveStatus] = useState<TaskStatus>(TaskStatus.Todo)
+    // Состояние для отслеживания, над каким табом находится перетаскиваемая карточка
+    const [draggingOverTab, setDraggingOverTab] = useState<string | null>(null)
 
     const columns = useMemo(() => {
         if (!filteredProject) {
@@ -47,22 +49,36 @@ const Project: FC = () => {
     const onDragEnd = (result: DropResult) => {
         const { source, destination } = result
 
-        if (!destination) return
+        // Сбрасываем состояние при окончании перетаскивания
+        setDraggingOverTab(null)
 
-        if (source.droppableId === destination.droppableId && source.index === destination.index) {
+        if (!destination) return
+        if (source.droppableId === destination.droppableId && source.index === destination.index)
             return
-        }
 
         const taskId = parseInt(result.draggableId, 10)
         const taskToMove = project.tasks.find((task) => task.id === taskId)
-
         if (!taskToMove) return
 
-        const newStatus = destination.droppableId as TaskStatus
+        let newStatus: TaskStatus
+        if (destination.droppableId.endsWith('_tab')) {
+            newStatus = destination.droppableId.replace('_tab', '') as TaskStatus
+        } else {
+            newStatus = destination.droppableId as TaskStatus
+        }
+
         const updatedTasks = project.tasks.map((task) =>
             task.id === taskId ? { ...task, status: newStatus } : task
         )
         setProject({ ...project, tasks: updatedTasks })
+    }
+
+    const onDragUpdate = (update: DragUpdate) => {
+        if (update.destination && update.destination.droppableId.endsWith('_tab')) {
+            setDraggingOverTab(update.destination.droppableId)
+        } else {
+            setDraggingOverTab(null)
+        }
     }
 
     const handleDeleteProject = () => {
@@ -79,7 +95,7 @@ const Project: FC = () => {
     }
 
     return (
-        <DragDropContext onDragEnd={onDragEnd}>
+        <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate}>
             <div className={styles.project}>
                 <Container>
                     <div className={styles.content}>
@@ -115,21 +131,35 @@ const Project: FC = () => {
                             </div>
                         </div>
                         <div className={styles.statusButtons}>
-                            {columns.map((column, index) => {
-                                return (
-                                    <button
-                                        key={index}
-                                        className={styles.button}
-                                        onClick={() => setActiveStatus(column.status)}
-                                    >
-                                        {statusMap[column.status].name}
-                                    </button>
-                                )
-                            })}
+                            {columns.map((column) => (
+                                <Droppable
+                                    key={`${column.status}_tab`}
+                                    droppableId={`${column.status}_tab`}
+                                >
+                                    {(provided, snapshot) => (
+                                        <div
+                                            ref={provided.innerRef}
+                                            {...provided.droppableProps}
+                                            className={classNames(styles.tabWrapper, {
+                                                [styles.highlightTab]: snapshot.isDraggingOver
+                                            })}
+                                        >
+                                            <button
+                                                className={styles.button}
+                                                onClick={() => setActiveStatus(column.status)}
+                                            >
+                                                {statusMap[column.status].name}
+                                            </button>
+                                            {/* provided.placeholder не требуется для табов */}
+                                        </div>
+                                    )}
+                                </Droppable>
+                            ))}
                         </div>
                         <div className={styles.columns}>
                             {columns.map((column) => {
                                 const { status, data, tasks } = column
+
                                 return (
                                     <Droppable key={status} droppableId={status}>
                                         {(provided) => (
@@ -148,15 +178,34 @@ const Project: FC = () => {
                                                             draggableId={String(task.id)}
                                                             index={index}
                                                         >
-                                                            {(provided) => (
-                                                                <div
-                                                                    ref={provided.innerRef}
-                                                                    {...provided.draggableProps}
-                                                                    {...provided.dragHandleProps}
-                                                                >
-                                                                    <TaskItem task={task} />
-                                                                </div>
-                                                            )}
+                                                            {(provided, snapshot) => {
+                                                                let extraClass = ''
+                                                                if (
+                                                                    snapshot.isDragging &&
+                                                                    draggingOverTab
+                                                                ) {
+                                                                    const targetStatus =
+                                                                        draggingOverTab.replace(
+                                                                            '_tab',
+                                                                            ''
+                                                                        )
+                                                                    extraClass =
+                                                                        styles[targetStatus]
+                                                                }
+                                                                return (
+                                                                    <div
+                                                                        ref={provided.innerRef}
+                                                                        {...provided.draggableProps}
+                                                                        {...provided.dragHandleProps}
+                                                                        className={classNames(
+                                                                            styles.taskWrapper,
+                                                                            extraClass
+                                                                        )}
+                                                                    >
+                                                                        <TaskItem task={task} />
+                                                                    </div>
+                                                                )
+                                                            }}
                                                         </Draggable>
                                                     ))}
                                                     {provided.placeholder}
