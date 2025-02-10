@@ -22,7 +22,12 @@ const Popup: FC<Props> = ({ className, children, isHidden, setIsHidden, isSpecia
             className={classNames(styles.overlay, { [styles.hidden]: isHidden })}
             onClick={onClick}
         >
-            <div className={classNames(styles.popup, className)}>{children}</div>
+            <div className={classNames(styles.popup, className)}>
+                {children}
+                <button className={styles.closeButton} onClick={() => setIsHidden(true)}>
+                    ✖
+                </button>
+            </div>
         </div>
     )
 }

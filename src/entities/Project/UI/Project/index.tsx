@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from 'react'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 import { DragDropContext, Droppable, Draggable, DropResult, DragUpdate } from '@hello-pangea/dnd'
 import { useProjects } from '../../../../app/providers/ProjectsProvider'
 import styles from './styles.module.scss'
@@ -22,9 +22,19 @@ const Project: FC = () => {
 
     const { isTaskPopupHidden, setIsTaskPopupHidden, setIsEditProjectPopupHidden } = usePopups()
 
+    const [isExpanded, setIsExpanded] = useState<boolean>(false)
+
     const [activeStatus, setActiveStatus] = useState<TaskStatus>(TaskStatus.Todo)
     // Состояние для отслеживания, над каким табом находится перетаскиваемая карточка
     const [draggingOverTab, setDraggingOverTab] = useState<string | null>(null)
+
+    useEffect(() => {
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 1024) {
+                setIsExpanded(true)
+            }
+        })
+    }, [])
 
     const columns = useMemo(() => {
         if (!filteredProject) {
@@ -130,31 +140,43 @@ const Project: FC = () => {
                                 </button>
                             </div>
                         </div>
-                        <div className={styles.statusButtons}>
-                            {columns.map((column) => (
-                                <Droppable
-                                    key={`${column.status}_tab`}
-                                    droppableId={`${column.status}_tab`}
-                                >
-                                    {(provided, snapshot) => (
-                                        <div
-                                            ref={provided.innerRef}
-                                            {...provided.droppableProps}
-                                            className={classNames(styles.tabWrapper, {
-                                                [styles.highlightTab]: snapshot.isDraggingOver
-                                            })}
-                                        >
-                                            <button
-                                                className={styles.button}
-                                                onClick={() => setActiveStatus(column.status)}
+                        <div className={styles.tabsLogic}>
+                            <button
+                                className={styles.expandButton}
+                                onClick={() => setIsExpanded((prevState) => !prevState)}
+                            >
+                                {isExpanded ? 'Collapse' : 'Expand'} tabs
+                            </button>
+                            <div
+                                className={classNames(styles.statusButtons, {
+                                    [styles.expanded]: isExpanded
+                                })}
+                            >
+                                {columns.map((column) => (
+                                    <Droppable
+                                        key={`${column.status}_tab`}
+                                        droppableId={`${column.status}_tab`}
+                                    >
+                                        {(provided, snapshot) => (
+                                            <div
+                                                ref={provided.innerRef}
+                                                {...provided.droppableProps}
+                                                className={classNames(styles.tabWrapper, {
+                                                    [styles.highlightTab]: snapshot.isDraggingOver
+                                                })}
                                             >
-                                                {statusMap[column.status].name}
-                                            </button>
-                                            {/* provided.placeholder не требуется для табов */}
-                                        </div>
-                                    )}
-                                </Droppable>
-                            ))}
+                                                <button
+                                                    className={styles.button}
+                                                    onClick={() => setActiveStatus(column.status)}
+                                                >
+                                                    {statusMap[column.status].name}
+                                                </button>
+                                                {/* provided.placeholder не требуется для табов */}
+                                            </div>
+                                        )}
+                                    </Droppable>
+                                ))}
+                            </div>
                         </div>
                         <div className={styles.columns}>
                             {columns.map((column) => {
@@ -177,6 +199,7 @@ const Project: FC = () => {
                                                             key={String(task.id)}
                                                             draggableId={String(task.id)}
                                                             index={index}
+                                                            isDragDisabled={!isExpanded}
                                                         >
                                                             {(provided, snapshot) => {
                                                                 let extraClass = ''

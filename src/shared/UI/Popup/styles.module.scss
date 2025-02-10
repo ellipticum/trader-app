@@ -24,6 +24,10 @@
   //width: clamp(320px, 90vw, 480px);
   height: fit-content;
   z-index: 20;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
   background: rgb(255, 255, 255);
 
   overflow: hidden auto;
@@ -83,6 +87,10 @@
   }
 }
 
+.content {
+  flex: 0 0 auto;
+}
+
 .popup h2 {
   font-size: 20px;
   font-weight: 400;
@@ -126,4 +134,25 @@
 
 .popup button[data-type='special']:hover {
   background: rgba(0, 0, 0, 0.75);
+}
+
+.closeButton {
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  transition: 200ms all ease-in-out;
+
+  &:hover {
+    color: var(--identify-color-10);
+  }
+
+  @media (min-width: 992px) {
+    width: 64px;
+    height: 64px;
+  }
 }
