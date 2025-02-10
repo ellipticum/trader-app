@@ -138,15 +138,15 @@ const Project: FC = () => {
                                 <button className={styles.button} onClick={handleDeleteProject}>
                                     Delete project
                                 </button>
+                                <button
+                                    className={classNames(styles.button, styles.expandButton)}
+                                    onClick={() => setIsExpanded((prevState) => !prevState)}
+                                >
+                                    {isExpanded ? 'Collapse' : 'Expand'} tabs
+                                </button>
                             </div>
                         </div>
                         <div className={styles.tabsLogic}>
-                            <button
-                                className={styles.expandButton}
-                                onClick={() => setIsExpanded((prevState) => !prevState)}
-                            >
-                                {isExpanded ? 'Collapse' : 'Expand'} tabs
-                            </button>
                             <div
                                 className={classNames(styles.statusButtons, {
                                     [styles.expanded]: isExpanded
