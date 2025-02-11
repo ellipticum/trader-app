@@ -28,10 +28,16 @@ const Project: FC = () => {
     const [draggingOverTab, setDraggingOverTab] = useState<string | null>(null)
 
     useEffect(() => {
-        window.addEventListener('resize', () => {
+        const onResize = () => {
             if (window.innerWidth > 1024) {
                 setIsExpanded(true)
             }
+        }
+
+        onResize()
+
+        window.addEventListener('resize', () => {
+            onResize()
         })
     }, [])
 
