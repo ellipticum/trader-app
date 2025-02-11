@@ -25,7 +25,6 @@ const Project: FC = () => {
     const [isExpanded, setIsExpanded] = useState<boolean>(false)
 
     const [activeStatus, setActiveStatus] = useState<TaskStatus>(TaskStatus.Todo)
-    // Состояние для отслеживания, над каким табом находится перетаскиваемая карточка
     const [draggingOverTab, setDraggingOverTab] = useState<string | null>(null)
 
     useEffect(() => {
@@ -59,7 +58,6 @@ const Project: FC = () => {
     const onDragEnd = (result: DropResult) => {
         const { source, destination } = result
 
-        // Сбрасываем состояние при окончании перетаскивания
         setDraggingOverTab(null)
 
         if (!destination) return
